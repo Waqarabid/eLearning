@@ -1,13 +1,20 @@
 import { useState } from "react";
+import axios from "axios";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("John");
+  const [email, setEmail] = useState("john@gmail.com");
+  const [password, setPassword] = useState("asdjkfje");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table({ name, email, password });
+    // console.table({ name, email, password });
+    const { data } = await axios.post(`http://localhost:8000/api/register`, {
+      name,
+      email,
+      password,
+    });
+    console.log("REGISTER RESPONSE", data);
   };
 
   return (
@@ -44,7 +51,7 @@ const Register = () => {
           />
 
           <div className="d-grid gap-2">
-            <button className="btn btn-primary" type="button">
+            <button className="btn btn-primary" type="submit">
               Submit
             </button>
           </div>
