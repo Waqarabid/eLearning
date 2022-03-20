@@ -37,4 +37,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.modal("User", userSchema);
+export default mongoose.model("User", userSchema);
