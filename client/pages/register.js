@@ -1,16 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { SyncOutlined } from "@ant-design/icons";
 
 const Register = () => {
   const [name, setName] = useState("John");
   const [email, setEmail] = useState("john@gmail.com");
   const [password, setPassword] = useState("asdjkfje");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.table({ name, email, password });
     try {
+      setLoading(true);
       const { data } = await axios.post(`http://localhost:8000/api/register`, {
         name,
         email,
@@ -18,8 +21,10 @@ const Register = () => {
       });
       // console.log("REGISTER RESPONSE", data);
       toast.success("Registered Successfully");
+      setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
+      setLoading(false);
     }
   };
 
@@ -57,8 +62,12 @@ const Register = () => {
           />
 
           <div className="d-grid gap-2">
-            <button className="btn btn-primary" type="submit">
-              Submit
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={!name || !email || !password || loading}
+            >
+              {loading ? <SyncOutlined spin /> : "Register"}
             </button>
           </div>
         </form>
