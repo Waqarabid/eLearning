@@ -21,7 +21,9 @@ app
       );
     }
 
-    server.all("*", (req, res) => handle(req, res));
+    server.all("*", (req, res) => {
+      return handle(req, res);
+    });
 
     server.listen(3000, (err) => {
       if (err) throw err;
@@ -29,5 +31,5 @@ app
     });
   })
   .catch((err) => {
-    console.error(err);
+    console.log("Error", err);
   });

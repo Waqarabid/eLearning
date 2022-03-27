@@ -62,19 +62,17 @@ const Register = () => {
             required
           />
 
-          <div className="d-grid gap-2">
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={!name || !email || !password || loading}
-            >
-              {loading ? <SyncOutlined spin /> : "Register"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="btn btn-block btn-primary"
+            disabled={!name || !email || !password || loading}
+          >
+            {loading ? <SyncOutlined spin /> : "Submit"}
+          </button>
         </form>
 
         <p className="text-center p-3">
-          Already have an account?{" "}
+          Already registered?{" "}
           <Link href="/login">
             <a>Login</a>
           </Link>

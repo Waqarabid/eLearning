@@ -11,25 +11,20 @@ const app = express();
 // db
 mongoose
   .connect(process.env.DB_CONNECTION, {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("**DB connected**"))
-  .catch((err) => console.log("DB CONNECTION ERROR: ", err));
+  .then(() => console.log("**DB CONNECTED**"))
+  .catch((err) => console.log("DB CONNECTION ERROR: => ", err));
 
 // apply middlewares
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-// routes
-readdirSync("./routes").map((routesFile) =>
-  app.use("/api", require(`./routes/${routesFile}`))
-);
+// route
+readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
 
 // port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(port, () => console.log(`Server is running on port ${port}`));

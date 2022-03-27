@@ -17,8 +17,6 @@ const Login = () => {
   // router
   const router = useRouter();
 
-  console.log("STATE", state);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.table({ name, email, password });
@@ -35,7 +33,7 @@ const Login = () => {
       });
       // save in local storage
       window.localStorage.setItem("user", JSON.stringify(data));
-      // redirect to home page
+      // redirect
       router.push("/");
       // setLoading(false);
     } catch (err) {
@@ -68,21 +66,19 @@ const Login = () => {
             required
           />
 
-          <div className="d-grid gap-2">
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={!email || !password || loading}
-            >
-              {loading ? <SyncOutlined spin /> : "Login"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="btn btn-block btn-primary"
+            disabled={!email || !password || loading}
+          >
+            {loading ? <SyncOutlined spin /> : "Submit"}
+          </button>
         </form>
 
         <p className="text-center p-3">
-          Don't have an account? <Link href="/register">Register</Link>
-          <Link href="/login">
-            <a>Login</a>
+          Not yet registered?{" "}
+          <Link href="/register">
+            <a>Register</a>
           </Link>
         </p>
       </div>

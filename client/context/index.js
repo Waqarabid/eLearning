@@ -1,7 +1,7 @@
 import { useReducer, createContext, useEffect } from "react";
 
 // initial state
-const initialState = {
+const intialState = {
   user: null,
 };
 
@@ -15,12 +15,14 @@ const rootReducer = (state, action) => {
       return { ...state, user: action.payload };
     case "LOGOUT":
       return { ...state, user: null };
+    default:
+      return state;
   }
 };
 
 // context provider
 const Provider = ({ children }) => {
-  const [state, dispatch] = useReducer(rootReducer, initialState);
+  const [state, dispatch] = useReducer(rootReducer, intialState);
 
   useEffect(() => {
     dispatch({
