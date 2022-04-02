@@ -80,3 +80,8 @@ export const currentUser = async (req, res) => {
     console.log(err);
   }
 };
+
+export const sendTestEmail = async (req, res) => {
+  console.log("SEND_TEST_EMAIL");
+  res.json({ ok: true });
+};
