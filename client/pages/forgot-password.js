@@ -18,31 +18,46 @@ const ForgotPassword = () => {
   const {
     state: { user },
   } = useContext(Context);
-
   // router
   const router = useRouter();
 
-  // redirect if logged in
+  // redirect if user is logged in
   useEffect(() => {
-    if (user !== null) {
-      router.push("/");
-    }
-  }, [user]);
+    if (user !== null) router.push("/");
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.table({ name, email, password });
+    setLoading(true);
     try {
-      setLoading(true);
-      const { data } = await axios.post(`/api/forgot-password`, {
-        email,
-      });
+      const { data } = await axios.post("/api/forgot-password", { email });
       setSuccess(true);
-      toast("Check your email for a reset code");
+      toast("Check your email for the secret code");
       setLoading(false);
     } catch (err) {
-      toast.error(err.response.data);
       setLoading(false);
+      toast(err.response.data);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    // console.log(email, code, newPassword);
+    // return;
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/reset-password", {
+        email,
+        code,
+        newPassword,
+      });
+      setEmail("");
+      setCode("");
+      setNewPassword("");
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      toast(err.response.data);
     }
   };
 
@@ -53,21 +68,43 @@ const ForgotPassword = () => {
       </h1>
 
       <div className="container col-md-4 offset-md-4 pb-5">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={success ? handleResetPassword : handleSubmit}>
           <input
             type="email"
-            className="form-control mb-4 p-4 border-0"
-            placeholder="Email"
+            className="form-control mb-4 p-4"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
+            required
           />
+          {success && (
+            <>
+              <input
+                type="text"
+                className="form-control mb-4 p-4"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="Enter secret code"
+                required
+              />
+
+              <input
+                type="password"
+                className="form-control mb-4 p-4"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New Password"
+                required
+              />
+            </>
+          )}
 
           <button
             type="submit"
-            className="btn btn-primary btn-block mb-4 p-4"
+            className="btn btn-primary btn-block p-2"
             disabled={loading || !email}
           >
-            {loading ? <SyncOutlined spin /> : "Send Reset Code"}
+            {loading ? <SyncOutlined spin /> : "Submit"}
           </button>
         </form>
       </div>
