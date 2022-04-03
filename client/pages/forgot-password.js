@@ -39,6 +39,7 @@ const ForgotPassword = () => {
       });
       setSuccess(true);
       toast("Check your email for a reset code");
+      setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
       setLoading(false);

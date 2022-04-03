@@ -12,6 +12,46 @@ const awsConfig = {
 
 const SES = new AWS.SES(awsConfig);
 
+export const sendTestEmail = async (req, res) => {
+  // console.log("SEND_TEST_EMAIL");
+  // res.json({ ok: true });
+  const params = {
+    Source: process.email.EMAIL_FROM,
+    Destination: {
+      ToAddresses: [process.env.TEST_EMAIL],
+    },
+    ReplyToAddresses: [process.email.EMAIL_FROM],
+    Message: {
+      Body: {
+        Html: {
+          Charset: "UTF-8",
+          Data: `
+            <html>
+              <h1>Reset password link</h1>
+              <p>Please use the following link to reset your password</p>
+            <html>
+          `,
+        },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: "Reset password link",
+      },
+    },
+  };
+
+  const emailSent = SES.sendEmail(params).promise();
+
+  emailSent
+    .then((data) => {
+      console.log("EMAIL_SENT", data);
+      res.json({ ok: true });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 export const register = async (req, res) => {
   try {
     // console.log(req.body);
@@ -91,42 +131,55 @@ export const currentUser = async (req, res) => {
   }
 };
 
-export const sendTestEmail = async (req, res) => {
-  // console.log("SEND_TEST_EMAIL");
-  // res.json({ ok: true });
-  const params = {
-    Source: process.email.EMAIL_FROM,
-    Destination: {
-      ToAddresses: [process.env.TEST_EMAIL],
-    },
-    ReplyToAddresses: [process.email.EMAIL_FROM],
-    Message: {
-      Body: {
-        Html: {
-          Charset: "UTF-8",
-          Data: `
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // console.log("FORGOT_PASSWORD", email);
+    const shortCode = nanoid(6).toUpperCase();
+    const user = await User.findOneAndUpdate(
+      { email },
+      { passwordResetCode: shortCode }
+    );
+    if (!user) return res.status(400).send("No user found");
+
+    // send email
+    const params = {
+      Source: process.env.EMAIL_FROM,
+      Destination: {
+        ToAddresses: [email],
+      },
+      Message: {
+        Body: {
+          Html: {
+            Charset: "UTF-8",
+            Data: `
             <html>
-              <h1>Reset password link</h1>
-              <p>Please use the following link to reset your password</p>
+              <h1>Reset password</h1>
+              <p>Use this code to reset the password</p>
+              <h2 style="color:red;">${shortCode}</h2>
+              <i>This code will expire in 10 minutes</i>
             <html>
           `,
+          },
+        },
+        Subject: {
+          Charset: "UTF-8",
+          Data: "Reset password",
         },
       },
-      Subject: {
-        Charset: "UTF-8",
-        Data: "Reset password link",
-      },
-    },
-  };
+    };
 
-  const emailSent = SES.sendEmail(params).promise();
+    const emailSent = SES.sendEmail(params).promise();
 
-  emailSent
-    .then((data) => {
-      console.log("EMAIL_SENT", data);
-      res.json({ ok: true });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    emailSent
+      .then((data) => {
+        console.log("EMAIL_SENT", data);
+        res.json({ ok: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (err) {
+    console.log(err);
+  }
 };
