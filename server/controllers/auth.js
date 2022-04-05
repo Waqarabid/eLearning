@@ -93,6 +93,7 @@ export const login = async (req, res) => {
     if (!user) return res.status(400).send("No user found");
     // check password
     const match = await comparePassword(password, user.password);
+    if (!match) return res.status(400).send("Password is incorrect");
     // create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
@@ -181,5 +182,22 @@ export const forgotPassword = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    // console.log("RESET_PASSWORD", email, newPassword, code);
+    const hashedPassword = await hashPassword(newPassword);
+
+    const user = await User.findOneAndUpdate(
+      { email, passwordResetCode: code },
+      { password: hashedPassword, passwordResetCode: null }
+    ).exec();
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Error. Try again.");
   }
 };
