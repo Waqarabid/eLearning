@@ -12,6 +12,7 @@ const awsConfig = {
 
 const SES = new AWS.SES(awsConfig);
 
+/*
 export const sendTestEmail = async (req, res) => {
   // console.log("SEND_TEST_EMAIL");
   // res.json({ ok: true });
@@ -51,6 +52,7 @@ export const sendTestEmail = async (req, res) => {
       console.log(err);
     });
 };
+*/
 
 export const register = async (req, res) => {
   try {
