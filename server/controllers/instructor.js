@@ -59,3 +59,17 @@ export const getAccountStatus = async (req, res) => {
     console.log(err);
   }
 };
+
+// currentInstructor checks if the user have the role of instructor
+export const currentInstructor = async (req, res) => {
+  try {
+    let user = await User.findById(req.user._id).select("-password").exec();
+    if (!user.role.includes("Instructor")) {
+      return res.status(401).send("Unauthorized");
+    } else {
+      res.json({ ok: true });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
