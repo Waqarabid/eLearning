@@ -50,6 +50,7 @@ const TopNav = () => {
       </Item>
 
       {user && user.role && user.role.includes("Instructor") ? (
+        // If user is an instructor then show the following menu
         <Item
           key="/instructor/course/create"
           onClick={(e) => setCurrent(e.key)}
@@ -60,6 +61,7 @@ const TopNav = () => {
           </Link>
         </Item>
       ) : (
+        // If user is not an instructor then show the following menu
         <Item
           key="/user/become-instructor"
           onClick={(e) => setCurrent(e.key)}
