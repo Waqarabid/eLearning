@@ -13,14 +13,17 @@ const CourseCreate = () => {
     paid: true,
     category: "",
     loading: false,
-    imagePreview: "",
   });
+
+  const [preview, setPreview] = useState(null);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleImage = () => {};
+  const handleImage = () => {
+    setPreview(window.URL.createObjectURL(e.target.files[0]));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +40,7 @@ const CourseCreate = () => {
           handleChange={handleChange}
           values={values}
           setValues={setValues}
+          preview={preview}
         />
       </div>
     </InstructorRoute>
