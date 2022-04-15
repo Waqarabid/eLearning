@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 import InstructorRoute from "../../../components/routes/InstructorRoute";
-
 import CourseCreateForm from "../../../components/forms/CourseCreateForm";
+import Resizer from "react-image-file-resizer";
+import { toast } from "react-toastify";
 
 const CourseCreate = () => {
   // state
@@ -15,14 +17,35 @@ const CourseCreate = () => {
     loading: false,
   });
 
-  const [preview, setPreview] = useState(null);
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
+  const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const handleImage = () => {
-    setPreview(window.URL.createObjectURL(e.target.files[0]));
+    let file = e.target.file[0];
+    setPreview(window.URL.createObjectURL(file));
+    setUploadButtonText(file.name);
+    setValues({ ...values, loading: true });
+
+    // resize
+    Resizer.imageFileResizer(file, 720, 500, "JPEG", 100, 0, async (uri) => {
+      try {
+        let { data } = await axios.post("/api/courses/upload-image", {
+          image: uri,
+        });
+        console.log("IMAGE UPLOADED", data);
+        // set image in the state
+        setValues({ ...values, loading: false });
+      } catch (err) {
+        console.log(err);
+        setValues({ ...values, loading: false });
+        toast.error("Image upload failed. Try later.");
+      }
+    });
   };
 
   const handleSubmit = (e) => {
@@ -41,6 +64,7 @@ const CourseCreate = () => {
           values={values}
           setValues={setValues}
           preview={preview}
+          uploadButtonText={uploadButtonText}
         />
       </div>
     </InstructorRoute>
