@@ -17,7 +17,7 @@ const CourseCreate = () => {
     loading: false,
   });
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
 
@@ -39,6 +39,7 @@ const CourseCreate = () => {
         });
         console.log("IMAGE UPLOADED", data);
         // set image in the state
+        setImage(data)
         setValues({ ...values, loading: false });
       } catch (err) {
         console.log(err);
