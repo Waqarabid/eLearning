@@ -4,6 +4,7 @@ import InstructorRoute from "../../../components/routes/InstructorRoute";
 import CourseCreateForm from "../../../components/forms/CourseCreateForm";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
+import { Router } from "express";
 
 const CourseCreate = () => {
   // state
@@ -66,9 +67,19 @@ const CourseCreate = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
+    try {
+      // console.log(values);
+      const { data } = await axios.post("/api/course", {
+        ...values,
+        image,
+      });
+      toast.success("Course created successfully.");
+      router.push("/instructor");
+    } catch (err) {
+      toast.error("Course creation failed. Try later.");
+    }
   };
 
   return (
