@@ -43,7 +43,7 @@ const CourseView = () => {
     try {
       const file = e.target.files[0];
       setUplaodButtonText(file.name);
-      setUploading(false);
+      setUploading(true);
 
       const videoData = new FormData();
       videoData.append("video", file);
