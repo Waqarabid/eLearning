@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import axios from "axios";
-import { Avatar, Tooltip, Button, Modal } from "antd";
+import { Avatar, Tooltip, Button, Modal, List, Item } from "antd";
 import { EditOutlined, CheckOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
@@ -173,6 +173,25 @@ const CourseView = () => {
                 handleVideoRemove={handleVideoRemove}
               />
             </Modal>
+            <div className="row pb-5">
+              <div className="col lesson-list">
+                <h4>
+                  {course && course.lessons && course.lessons.length} Lessons
+                </h4>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={course && course.lessons}
+                  renderItem={(item, index) => {
+                    <Item>
+                      <Item.Meta
+                        avatar={<Avatar>{index + 1}</Avatar>}
+                        title={item.title}
+                      ></Item.Meta>
+                    </Item>;
+                  }}
+                ></List>
+              </div>
+            </div>
           </div>
         )}
       </div>
