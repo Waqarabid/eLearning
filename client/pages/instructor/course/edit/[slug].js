@@ -84,14 +84,14 @@ const CourseEdit = () => {
     e.preventDefault();
     try {
       // console.log(values);
-      const { data } = await axios.post("/api/course", {
+      const { data } = await axios.put("/api/course", {
         ...values,
         image,
       });
-      toast.success("Course created successfully.");
-      router.push("/instructor");
+      toast.success("Course updated!");
+      // router.push("/instructor");
     } catch (err) {
-      toast.error("Course creation failed. Try later.");
+      toast.error(err.response.data);
     }
   };
 
@@ -108,6 +108,7 @@ const CourseEdit = () => {
           preview={preview}
           uploadButtonText={uploadButtonText}
           handleImageRemove={handleImageRemove}
+          editPage={true}
         />
       </div>
       {/* <pre>{JSON.stringify(values, null, 4)}</pre>
