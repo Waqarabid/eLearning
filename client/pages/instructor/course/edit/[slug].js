@@ -33,6 +33,7 @@ const CourseEdit = () => {
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
     setValues(data);
+    if (data && data.image) setImage(data.image);
   };
 
   const handleChange = (e) => {
@@ -84,7 +85,7 @@ const CourseEdit = () => {
     e.preventDefault();
     try {
       // console.log(values);
-      const { data } = await axios.put("/api/course", {
+      const { data } = await axios.put(`/api/course/${slug}`, {
         ...values,
         image,
       });
@@ -102,12 +103,12 @@ const CourseEdit = () => {
         <CourseCreateForm
           handleSubmit={handleSubmit}
           handleImage={handleImage}
+          handleImageRemove={handleImageRemove}
           handleChange={handleChange}
           values={values}
           setValues={setValues}
           preview={preview}
           uploadButtonText={uploadButtonText}
-          handleImageRemove={handleImageRemove}
           editPage={true}
         />
       </div>
