@@ -27,6 +27,10 @@ const CourseEdit = () => {
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
 
+  // state for lessons update
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState({});
+
   // router
   const router = useRouter();
   const { slug } = router.query;
@@ -173,6 +177,10 @@ const CourseEdit = () => {
                 onDrop={(e) => handleDrop(e, index)}
               >
                 <Item.Meta
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrent(item);
+                  }}
                   avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.title}
                 ></Item.Meta>
@@ -185,6 +193,17 @@ const CourseEdit = () => {
           ></List>
         </div>
       </div>
+
+      <Modal
+        title="Update lesson"
+        centered
+        visible={visible}
+        onCancel={() => setVisible(false)}
+        footer={null}
+      >
+        update lesson form
+        <pre>{JSON.stringify(current, null, 4)}</pre>
+      </Modal>
     </InstructorRoute>
   );
 };
