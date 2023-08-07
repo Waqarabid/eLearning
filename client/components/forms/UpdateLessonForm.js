@@ -1,5 +1,6 @@
-import { Button, Progress, Tooltip } from "antd";
+import { Button, Progress, Switch } from "antd";
 import { CloseCircleFilled } from "@ant-design/icons";
+import ReactPlayer from "react-player";
 
 const UpdateLessonForm = ({
   current,
@@ -30,7 +31,18 @@ const UpdateLessonForm = ({
             value={current.content}
           ></textarea>
 
-          <div className="d-flex justify-content-center">
+          <div>
+            {!uploading && current.video && current.video.Location && (
+              <div className="pt-2 d-flex justify-content-center">
+                <ReactPlayer
+                  url={current.video.Location}
+                  width="310px"
+                  height="240px"
+                  controls
+                />
+              </div>
+            )}
+
             <label className="btn btn-dark btn-block text-left mt-3">
               {uploadVideoButtonText}
               <input
@@ -40,11 +52,6 @@ const UpdateLessonForm = ({
                 hidden
               />
             </label>
-            {!uploading && current.video && current.video.Location && (
-              <div className="pt-2 d-flex justify-content-center">
-                show video player on react player
-              </div>
-            )}
           </div>
 
           {progress > 0 && (
@@ -57,6 +64,13 @@ const UpdateLessonForm = ({
 
           <div className="d-flex justify-content-between">
             <span className="pt-3 badge">Preview</span>
+            <Switch
+              className="float-right mt-2"
+              disabled={uploading}
+              defaultChecked={current.free_preview}
+              name="free_preview"
+              onChange={(v) => setCurrent({ ...current, free_preview: v })}
+            />
           </div>
 
           <Button
