@@ -233,3 +233,7 @@ export const removeLesson = async (req, res) => {
     $pull: { lessons: { _id: lessonId } },
   });
 };
+
+export const updateLesson = (req, res) => {
+  console.log("lesson update");
+};
