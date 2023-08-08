@@ -188,8 +188,14 @@ const CourseEdit = () => {
     );
     setUploadVideoButtonText("Upload Video");
     setVisible(false);
-    toast("Lesson updated");
-    setCourse(data);
+
+    // update ui
+    if (data.ok) {
+      let arr = values.lessons;
+      const index = arr.findIndex((element) => element.id === current._id);
+      arr[index] = current;
+      setValues({ ...values, lessons: arr });
+    }
   };
 
   return (
