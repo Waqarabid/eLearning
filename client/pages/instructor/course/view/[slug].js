@@ -8,6 +8,7 @@ import {
   CheckOutlined,
   UploadOutlined,
   QuestionOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
@@ -129,7 +130,7 @@ const CourseView = () => {
       if (!answer) return;
       const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
       setCourse(data);
-      toast("Yourse course is unpublished");
+      toast("Your course is unpublished");
     } catch (err) {
       toast("Course publish failed. Try again");
     }
