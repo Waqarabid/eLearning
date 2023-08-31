@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { Badge } from "antd";
+import { Badge, Modal } from "antd";
 import { currencyFormatter } from "../../utils/helpers";
+import ReactPlayer from "react-player";
 
 const SingleCourse = ({ course }) => {
+  // state
+  const [showModal, setShowModal] = useState(false);
+  const [preview, setPreview] = useState("");
+
   const router = useRouter();
   const { slug } = router.query;
   // destructure
@@ -54,12 +59,37 @@ const SingleCourse = ({ course }) => {
           </div>
           <div className="col-md-4">
             {/* show video preview of course image */}
-            <p>show course image</p>
+
+            {lessons[0].video && lessons[0].video.Location ? (
+              <div
+                onClick={() => {
+                  setPreview(lessons[0].video.Location);
+                  setShowModal(!showModal);
+                }}
+              >
+                <ReactPlayer
+                  className="react-player-div"
+                  url={lessons[0].video.Location}
+                  light={image.Location}
+                  width="100%"
+                  height="225px"
+                />
+              </div>
+            ) : (
+              <>
+                <img
+                  src={image.Locations}
+                  alt={name}
+                  className="img img-fluid"
+                />
+              </>
+            )}
             {/* enroll button */}
-            <p>show enroll button</p>
           </div>
         </div>
       </div>
+
+      {showModal ? course.lessons[0].video.Location : "dont show"}
     </>
   );
 };
